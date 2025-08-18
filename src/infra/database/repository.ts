@@ -11,4 +11,11 @@ export class Repository {
             data,
         });
     }
+
+    async update(id: string, data: any): Promise<any> {
+        return await this.prisma[this.model].update({
+            where: { id },
+            data,
+        });
+    }
 }

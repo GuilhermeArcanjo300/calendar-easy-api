@@ -19,6 +19,10 @@ export class AuthService {
         throw new UnauthorizedException('E-mail ou senha incorreta.');
     }
 
+    if (!user.password) {
+        throw new UnauthorizedException('E-mail ou senha incorreta.');
+    }
+
     const valid = await bcrypt.compare(data.password, user.password);
     if (!valid) {
         throw new UnauthorizedException('E-mail ou senha incorreta.');

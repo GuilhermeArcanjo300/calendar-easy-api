@@ -23,4 +23,6 @@ model User {
   createdAt DateTime @map("created_at") @default(now())
   updatedAt DateTime @map("updated_at") @updatedAt
   deletedAt DateTime? @map("deleted_at")
+
+  @@map("users")
 }

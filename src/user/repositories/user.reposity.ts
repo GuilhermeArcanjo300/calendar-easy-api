@@ -10,6 +10,20 @@ export class UserRepository extends Repository {
         super(prisma, "user");
     }
 
+    async findById(id: string): Promise<UserEntity | null> {
+        const user = await this.prisma.user.findUnique({
+            where: {
+                id,
+            },
+        });
+
+        if(!user) {
+            return null;
+        }
+
+        return UserMapper.mapPrismaToEntity(user);
+    }
+
     async findByEmail(email: string): Promise<UserEntity | null> {
         const user = await this.prisma.user.findUnique({
             where: {
