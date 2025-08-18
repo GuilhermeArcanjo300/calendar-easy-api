@@ -1,7 +1,6 @@
 import { Injectable, NotFoundException, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { SignupDto } from './dtos/signup.dto';
 import { LoginDto } from './dtos/login.dto';
 import { UserRepository } from 'src/user/repositories/user.reposity';
 import { AccessTokenDto } from './dtos/access-token';
@@ -12,17 +11,6 @@ export class AuthService {
     private readonly userRepository: UserRepository,
     private readonly jwtService: JwtService,
   ) {}
-
-  async signup(data: SignupDto) {
-    const hashed = await bcrypt.hash(data.password, 10);
-    const user = await this.userRepository.create({
-        email: data.email,
-        password: hashed,
-        name: data.name,
-    });
-    const token = this.token(user.id, user.email);
-    return new AccessTokenDto(token);
-  }
 
   async login(data: LoginDto) {
     const user = await this.userRepository.findByEmail(data.email);

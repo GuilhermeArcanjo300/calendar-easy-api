@@ -3,7 +3,9 @@ import { UserRepository } from "src/user/repositories/user.reposity";
 import { PrismaService } from "./prisma/prisma.service";
 
 @Module({
-  providers: [{
+  providers: [
+    PrismaService,
+    {
     provide: UserRepository,
     useFactory: (prismaService: PrismaService) => {
       return new UserRepository(prismaService);

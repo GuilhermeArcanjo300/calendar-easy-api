@@ -1,31 +1,43 @@
-version: '3.9'
+version: '3.8'
 
 services:
   api:
+    build: .
     container_name: calendario-easy-api
-    build: ./
-    restart: always
-    ports:
-      - "3000:3000"
     depends_on:
-      - postgres
+      - db
+    ports:
+      - '3000:3000'
     environment:
-      DATABASE_URL: postgres://postgres:postgres@postgres:5432/calendarioeasy
+      DATABASE_URL: postgres://postgres:postgres@db:5432/calendar_easy
     volumes:
-      - ./:/app
+      - .:/app
+    command: sh -c "npx prisma migrate deploy && npm run start:prod"
 
-  postgres:
+  db:
     image: postgres:15
     container_name: calendario-easy-db
     restart: always
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
-      POSTGRES_DB: calendarioeasy
+      POSTGRES_DB: calendar_easy
     ports:
-      - "5432:5432"
+      - '5432:5432'
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgdata:/var/lib/postgresql/data
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: calendario-easy-pgadmin
+    restart: always
+    ports:
+      - '5050:80'
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@admin.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    depends_on:
+      - db
 
 volumes:
-  postgres_data:
+  pgdata:
