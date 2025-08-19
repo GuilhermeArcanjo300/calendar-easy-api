@@ -11,6 +11,7 @@ export class UserMapper {
         userEntity.email = user.email;
         userEntity.phone = user.phone ?? undefined;
         userEntity.profile = user.profile;
+        userEntity.password = user.password ?? undefined;
 
         if (user.enterprise) {
             userEntity.enterprise = EnterpriseMapper.mapPrismaToEntity(user.enterprise);
