@@ -1,2 +1,40 @@
+# Dependências (vamos instalar dentro do container)
 node_modules
+npm-debug.log
+yarn-error.log
+
+# Builds locais (mas cuidado com dist/, só ignore no host, não no Dockerfile final)
+dist
+.out
+.next
+
+# Logs
+*.log
+logs
+*.pid
+*.seed
+*.pid.lock
+
+# Arquivos de ambiente (serão injetados pelo Railway)
 .env
+.env.*
+!.env.example
+
+# Cache
+.cache
+.nyc_output
+coverage
+
+# IDEs/Editor
+.vscode
+.idea
+*.swp
+*.swo
+
+# Sistema operacional
+.DS_Store
+Thumbs.db
+
+# Docker
+Dockerfile
+.dockerignore
