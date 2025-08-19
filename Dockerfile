@@ -4,7 +4,7 @@ FROM node:18-alpine AS builder
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm install
+RUN npm install --legacy-peer-deps
 
 COPY . .
 
@@ -22,9 +22,11 @@ RUN addgroup -g 1001 app && adduser -D -u 1001 -G app app
 # Copie arquivos do builder
 COPY --from=builder /app /app
 
-RUN npm install -g prisma
-
 RUN chown -R app:app /app
 USER app
 
-CMD ["npx", "prisma", "migrate", "deploy", "&&", "node", "dist/main"]
+# Expõe a porta usada pelo NestJS
+EXPOSE 3000
+
+# Executa as migrações e inicia a API
+CMD sh -c "npx prisma migrate deploy && node dist/main"
