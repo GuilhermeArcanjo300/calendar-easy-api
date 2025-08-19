@@ -16,17 +16,16 @@ FROM node:18-alpine
 
 WORKDIR /app
 
-# Crie um usuário com permissões
 RUN addgroup -g 1001 app && adduser -D -u 1001 -G app app
 
-# Copie arquivos do builder
-COPY --from=builder /app /app
+COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/prisma ./prisma
 
 RUN chown -R app:app /app
 USER app
 
-# Expõe a porta usada pelo NestJS
 EXPOSE 3000
 
-# Executa as migrações e inicia a API
 CMD sh -c "npx prisma migrate deploy && node dist/main"
