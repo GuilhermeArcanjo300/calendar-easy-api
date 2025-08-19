@@ -15,6 +15,9 @@ export class UserRepository extends Repository {
             where: {
                 id,
             },
+            include: {
+                enterprise: true,
+            },
         });
 
         if(!user) {

@@ -1,4 +1,5 @@
 import { ProfileRole } from "@prisma/client";
+import { EnterpriseEntity } from "src/enterprise/entities/enterprise.entity";
 
 export class UserEntity {
     id: string;
@@ -10,4 +11,6 @@ export class UserEntity {
     createdAt: Date;
     updatedAt: Date;
     deletedAt: Date | null;
+
+    enterprise?: EnterpriseEntity;
 }

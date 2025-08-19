@@ -2,7 +2,6 @@ generator client {
   provider = "prisma-client-js"
 }
 
-
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -14,15 +13,33 @@ enum ProfileRole {
 }
 
 model User {
-  id        String   @id @default(uuid())
+  id        String      @id @default(uuid())
   name      String
-  email     String  @unique
+  email     String      @unique
   phone     String?
   profile   ProfileRole @default(USER)
   password  String?
-  createdAt DateTime @map("created_at") @default(now())
-  updatedAt DateTime @map("updated_at") @updatedAt
-  deletedAt DateTime? @map("deleted_at")
+  createdAt DateTime    @default(now()) @map("created_at")
+  updatedAt DateTime    @updatedAt @map("updated_at")
+  deletedAt DateTime?   @map("deleted_at")
+
+  enterprise Enterprise?
 
   @@map("users")
+}
+
+model Enterprise {
+  id          String    @id @default(uuid())
+  name        String
+  address     String
+  phone       String
+  description String?
+  userId      String    @unique @map("user_id")
+  createdAt   DateTime  @default(now()) @map("created_at")
+  updatedAt   DateTime  @updatedAt @map("updated_at")
+  deletedAt   DateTime? @map("deleted_at")
+
+  user User @relation(fields: [userId], references: [id])
+
+  @@map("enterprise")
 }
