@@ -41,4 +41,19 @@ export class EnterpriseRepository extends Repository {
 
         return EnterpriseMapper.mapPrismaToEntity(enterprise);
     }
+
+    async findByUserId(userId: string): Promise<EnterpriseEntity | null> {
+        const enterprise = await this.prisma.enterprise.findUnique({
+            where: {
+                userId,
+                deletedAt: null,
+            },
+        });
+
+        if(!enterprise) {
+            return null;
+        }
+
+        return EnterpriseMapper.mapPrismaToEntity(enterprise);
+    }
 } 

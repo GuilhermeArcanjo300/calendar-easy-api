@@ -2,6 +2,8 @@ import { Module } from "@nestjs/common";
 import { UserRepository } from "src/user/repositories/user.reposity";
 import { PrismaService } from "./prisma/prisma.service";
 import { EnterpriseRepository } from "src/enterprise/repositories/enterprise.repository";
+import { ClientRepository } from "src/client/repositories/client.repository";
+import { ServiceRepository } from "src/service/repositories/service.repository";
 
 @Module({
   providers: [
@@ -19,7 +21,21 @@ import { EnterpriseRepository } from "src/enterprise/repositories/enterprise.rep
       return new EnterpriseRepository(prismaService);
     },
     inject: [PrismaService],
+  },
+  {
+    provide: ClientRepository,
+    useFactory: (prismaService: PrismaService) => {
+      return new ClientRepository(prismaService);
+    },
+    inject: [PrismaService],
+  },
+  {
+    provide: ServiceRepository,
+    useFactory: (prismaService: PrismaService) => {
+      return new ServiceRepository(prismaService);
+    },
+    inject: [PrismaService],
   }],
-  exports: [UserRepository, EnterpriseRepository],
+  exports: [UserRepository, EnterpriseRepository, ClientRepository, ServiceRepository],
 })
 export class DatabaseModule {}
