@@ -41,7 +41,8 @@ model Enterprise {
 
   user User @relation(fields: [userId], references: [id])
 
-  clients Client[]
+  clients  Client[]
+  services Service[]
 
   @@map("enterprise")
 }
@@ -59,6 +60,23 @@ model Client {
   deletedAt    DateTime? @map("deleted_at")
 
   enterprise Enterprise @relation(fields: [enterpriseId], references: [id])
-  
+
   @@map("clients")
+}
+
+model Service {
+  id           String    @id @default(uuid())
+  name         String
+  description  String
+  minute       Int
+  value        Decimal   @db.Decimal(20, 2)
+  active       Boolean   @default(true)
+  enterpriseId String    @map("enterprise_id")
+  createdAt    DateTime  @default(now()) @map("created_at")
+  updatedAt    DateTime  @updatedAt @map("updated_at")
+  deletedAt    DateTime? @map("deleted_at")
+
+  enterprise Enterprise @relation(fields: [enterpriseId], references: [id])
+
+  @@map("services")
 }
