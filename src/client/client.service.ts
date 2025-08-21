@@ -35,6 +35,23 @@ export class ClientService {
         } as ClientEntity);
     }
 
+    async updateStatus(userId: string, id: string, active: boolean): Promise<void> {
+        const enterprise = await this.enterpriseService.getEnterpriseIdByUser(userId);
+        const existing = await this.clientRepository.findById(id);
+
+        if (!existing) {
+            throw new NotFoundException('Cliente não encontrado');
+        }
+        
+        if (existing.enterpriseId !== enterprise.id) {
+            throw new ForbiddenException('Acesso negado ao cliente informado');
+        }
+
+        await this.clientRepository.update(id, {
+            active
+        } as ClientEntity);
+    }
+
     async update(userId: string, id: string, data: UpdateClientDto): Promise<void> {
         const enterprise = await this.enterpriseService.getEnterpriseIdByUser(userId);
         const existing = await this.clientRepository.findById(id);

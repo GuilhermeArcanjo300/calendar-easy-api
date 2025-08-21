@@ -27,6 +27,23 @@ export class ServiceService {
         } as ServiceEntity);
     }
 
+    async updateStatus(userId: string, id: string, active: boolean): Promise<void> {
+        const enterprise = await this.enterpriseService.getEnterpriseIdByUser(userId);
+        const existing = await this.serviceRepository.findById(id);
+
+        if (!existing) {
+            throw new NotFoundException('Serviço não encontrado');
+        }
+        
+        if (existing.enterpriseId !== enterprise.id) {
+            throw new ForbiddenException('Acesso negado ao serviço informado');
+        }
+
+        await this.serviceRepository.update(id, {
+            active,
+        } as ServiceEntity);
+    }
+
     async update(userId: string, id: string, data: UpdateServiceDto): Promise<void> {
         const enterprise = await this.enterpriseService.getEnterpriseIdByUser(userId);
         const existing = await this.serviceRepository.findById(id);

@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Post, Put, UseGuards } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, HttpStatus, Param, Patch, Post, Put, UseGuards } from '@nestjs/common';
 import { ServiceService } from './service.service';
 import { UserGuard } from 'src/user/guards/user.guard';
 import { UserId } from 'src/user/decorators/user-id.decorator';
@@ -15,6 +15,24 @@ export class ServiceController {
     @UseGuards(UserGuard)
     async create(@Body() data: CreateServiceDto, @UserId() userId: string): Promise<void> {
         await this.serviceService.create(userId, data);
+    }
+
+    @Patch(':id/active')
+    @UseGuards(UserGuard)
+    async activeService(
+        @Param('id') id: string,
+        @UserId() userId: string,
+    ): Promise<void> {
+        await this.serviceService.updateStatus(userId, id, true);
+    }
+
+    @Patch(':id/disable')
+    @UseGuards(UserGuard)
+    async disableService(
+        @Param('id') id: string,
+        @UserId() userId: string,
+    ): Promise<void> {
+        await this.serviceService.updateStatus(userId, id, false);
     }
 
     @Put(':id')
