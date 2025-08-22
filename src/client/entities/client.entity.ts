@@ -1,3 +1,5 @@
+import { CalendarEntity } from "src/calendar/entities/calendar.entity";
+
 export class ClientEntity {
     id: string;
     name: string;
@@ -6,6 +8,15 @@ export class ClientEntity {
     active: boolean;
     enterpriseId: string;
     observation?: string;
+
+    calendar: CalendarEntity[];
+
+    getVisitCounter(): number {
+        if(!this.calendar) {
+            return 0;
+        }
+        return this.calendar.length;
+    }
 }
 
 

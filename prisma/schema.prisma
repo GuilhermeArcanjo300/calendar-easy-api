@@ -12,6 +12,13 @@ enum ProfileRole {
   USER
 }
 
+enum StatusCalendar {
+  COMPLETED
+  CONFIRMED
+  PENDING
+  CANCELED
+}
+
 model User {
   id        String      @id @default(uuid())
   name      String
@@ -61,6 +68,8 @@ model Client {
 
   enterprise Enterprise @relation(fields: [enterpriseId], references: [id])
 
+  calendar Calendar[]
+
   @@map("clients")
 }
 
@@ -78,5 +87,25 @@ model Service {
 
   enterprise Enterprise @relation(fields: [enterpriseId], references: [id])
 
+  calendar Calendar[]
+
   @@map("services")
+}
+
+model Calendar {
+  id        String         @id @default(uuid())
+  clientId  String         @map("client_id")
+  serviceId String         @map("service_id")
+  date      DateTime       @db.Date
+  startTime DateTime       @map("start_time") @db.Time()
+  endTime   DateTime       @map("end_time") @db.Time()
+  status    StatusCalendar
+  createdAt DateTime       @default(now()) @map("created_at")
+  updatedAt DateTime       @updatedAt @map("updated_at")
+  deletedAt DateTime?      @map("deleted_at")
+
+  client  Client  @relation(fields: [clientId], references: [id])
+  service Service @relation(fields: [serviceId], references: [id])
+
+  @@map("calendar")
 }

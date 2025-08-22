@@ -1,9 +1,11 @@
-import { Client } from "@prisma/client";
+import { Calendar, Client } from "@prisma/client";
 import { ClientEntity } from "../entities/client.entity";
 import { ClientDto } from "../dtos/client.dto";
+import { CalendarMapper } from "src/calendar/mappers/calendar.mapper";
 
 export class ClientMapper {
-    static mapPrismaToEntity(client: Client): ClientEntity {
+    static mapPrismaToEntity(client: Client & { calendar?: Calendar[] }): ClientEntity {
+        const { calendar } = client;
         const clientEntity = new ClientEntity();
         clientEntity.id = client.id;
         clientEntity.name = client.name;
@@ -12,6 +14,11 @@ export class ClientMapper {
         clientEntity.enterpriseId = client.enterpriseId;
         clientEntity.active = client.active;
         clientEntity.observation = client.observation ?? undefined;
+
+        if(calendar) {
+            clientEntity.calendar = calendar.map(CalendarMapper.mapPrismaToEntity);
+        }
+
         return clientEntity;
     }
 
@@ -23,6 +30,7 @@ export class ClientMapper {
         clientDto.phone = client.phone;
         clientDto.active = client.active;
         clientDto.observation = client.observation;
+        clientDto.visitCounter = client.getVisitCounter();
         return clientDto;
     }
 }

@@ -5,6 +5,7 @@ import { ClientEntity } from "../entities/client.entity";
 import { ClientMapper } from "../mappers/client.mapper";
 import { CreateClientDto } from "../dtos/create-client.dto";
 import { UpdateClientDto } from "../dtos/update-client.dto";
+import { StatusCalendar } from "@prisma/client";
 
 @Injectable()
 export class ClientRepository extends Repository {
@@ -49,7 +50,17 @@ export class ClientRepository extends Repository {
                     userId,
                 },
                 deletedAt: null,
-             },
+            },
+            include: {
+                calendar: {
+                    where: {
+                        status: {
+                            in: [StatusCalendar.CONFIRMED, StatusCalendar.COMPLETED]
+                        },
+                        deletedAt: null,
+                    }
+                }
+            },
             orderBy: { createdAt: "desc" },
         });
 
