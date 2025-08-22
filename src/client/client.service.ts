@@ -15,6 +15,20 @@ export class ClientService {
         private readonly enterpriseService: EnterpriseService,
     ) {}
 
+    async findByIdAndUserId(id: string, userId: string): Promise<ClientEntity> {
+        const client = await this.clientRepository.findById(id);
+        if(!client) {
+            throw new NotFoundException('Cliente não encontrado!');
+        }
+
+        const enterprise = await this.enterpriseService.getEnterpriseIdByUser(userId);
+        if (client.enterpriseId !== enterprise.id) {
+            throw new NotFoundException('Cliente não encontrado!');
+        }
+
+        return client;
+    }
+
     async create(userId: string, data: CreateClientDto): Promise<void> {
         const enterprise = await this.enterpriseService.getEnterpriseIdByUser(userId);
 

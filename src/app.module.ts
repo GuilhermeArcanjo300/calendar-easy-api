@@ -4,8 +4,9 @@ import { UserModule } from './user/user.module';
 import { EnterpriseModule } from './enterprise/enterprise.module';
 import { ClientModule } from './client/client.module';
 import { ServiceModule } from './service/service.module';
+import { CalendarModule } from './calendar/calendar.module';
 
 @Module({
-  imports: [AuthModule, UserModule, EnterpriseModule, ClientModule, ServiceModule],
+  imports: [AuthModule, UserModule, EnterpriseModule, ClientModule, ServiceModule, CalendarModule],
 })
 export class AppModule {}

@@ -4,6 +4,7 @@ import { PrismaService } from "./prisma/prisma.service";
 import { EnterpriseRepository } from "src/enterprise/repositories/enterprise.repository";
 import { ClientRepository } from "src/client/repositories/client.repository";
 import { ServiceRepository } from "src/service/repositories/service.repository";
+import { CalendarRepository } from "src/calendar/repositories/calendar.repository";
 
 @Module({
   providers: [
@@ -35,7 +36,14 @@ import { ServiceRepository } from "src/service/repositories/service.repository";
       return new ServiceRepository(prismaService);
     },
     inject: [PrismaService],
+  },
+  {
+    provide: CalendarRepository,
+    useFactory: (prismaService: PrismaService) => {
+      return new CalendarRepository(prismaService);
+    },
+    inject: [PrismaService],
   }],
-  exports: [UserRepository, EnterpriseRepository, ClientRepository, ServiceRepository],
+  exports: [UserRepository, EnterpriseRepository, ClientRepository, ServiceRepository, CalendarRepository],
 })
 export class DatabaseModule {}

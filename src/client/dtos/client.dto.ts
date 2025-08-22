@@ -5,6 +5,7 @@ export class ClientDto {
     phone?: string;
     active: boolean;
     observation?: string;
+    visitCounter: number;
 }
 
 
